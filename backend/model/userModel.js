@@ -20,6 +20,7 @@ const userSchema =mongoose.Schema(
         country:{
             type:String,
             required:true,
+            dafault: "Bangladesh",
         },
         isAdmin:{
             type: Boolean,
