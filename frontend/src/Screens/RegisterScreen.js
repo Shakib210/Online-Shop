@@ -30,19 +30,25 @@ const RegisterScreen = ({ location, history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    if (password !== confirmPassword) {
-      setMessage('Passwords do not match')
-    } else {
-      
-      dispatch(register(name, email,country,password))
+    if(password.length >5){
+      if (password !== confirmPassword ) {
+        setMessage('Passwords do not match')
+      } else {
+          if(country.length===0){
+            setMessage('Please select a country')
+          }
+        dispatch(register(name, email,country,password))
+      }
+    }else{
+      setMessage('Password length must be more then 5')
     }
+   
   }
 
   return (
     <FormContainer>
       <h1>Sign Up</h1>
       {message && <Message variant='danger'>{message}</Message>}
-      {error && <Message variant='danger'>{error}</Message>}
       {loading && <Loader />}
       <Form onSubmit={submitHandler}>
         <Form.Group controlId='name'>
@@ -69,6 +75,7 @@ const RegisterScreen = ({ location, history }) => {
         <Form.Group controlId='country'>
           <Form.Label>Country</Form.Label>
           <select value={country} onChange={(e)=>setCountry(e.target.value)} className="ml-3">
+          <option >Select a country</option>
             <option value="Bangladesh">Bangladesh</option>
             <option value="Pakistan">Pakistan</option>
             <option value="USA">United States</option>

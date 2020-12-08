@@ -14,6 +14,7 @@ const ProductScreen = ({ history, match }) => {
     const [qty, setQty] = useState(1)
     const [rating, setRating] = useState(0)
     const [comment, setComment] = useState('')
+    const [message, setMessage] = useState('')
   
     const dispatch = useDispatch()
   
@@ -27,7 +28,6 @@ const ProductScreen = ({ history, match }) => {
     const {
       success: successProductReview,
       loading: loadingProductReview,
-      error: errorProductReview,
     } = productReviewCreate
   
     useEffect(() => {
@@ -39,7 +39,7 @@ const ProductScreen = ({ history, match }) => {
         dispatch(listProductDetails(match.params.id))
         dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
       }
-    }, [dispatch, match, successProductReview, product])
+    }, [dispatch, match, successProductReview, product, comment])
   
     const addToCartHandler = () => {
       history.push(`/cart/${match.params.id}?qty=${qty}`)
@@ -47,12 +47,19 @@ const ProductScreen = ({ history, match }) => {
   
     const submitHandler = (e) => {
       e.preventDefault()
-      dispatch(
+      if(comment.length === 0){
+        setMessage('Comment is required')
+     }else{
+      dispatch(   
         createProductReview(match.params.id, {
           rating,
           comment,
         })
       )
+      setMessage('')
+      window.location.reload(false);
+     }
+      
     }
   
     return (
@@ -154,7 +161,7 @@ const ProductScreen = ({ history, match }) => {
                 <ListGroup variant='flush'>
                   {product.reviews.map((review) => (
                     <ListGroupItem key={review._id}>
-                      <strong>{review.name}</strong>
+                      <strong style={{fontSize:'25px', marginTop:'10px'}}>{review.name}</strong>
                       <Rating value={review.rating} />
                       <p>{review.createdAt.substring(0, 10)}</p>
                       <p>{review.comment}</p>
@@ -165,15 +172,18 @@ const ProductScreen = ({ history, match }) => {
                       <Message variant='success'>
                         Review submitted successfully
                       </Message>
-                    )}
+                     
+                    )
+                   
+                    }
                     {loadingProductReview && <Loader />}
-                    {errorProductReview && (
-                      <Message variant='danger'>{errorProductReview}</Message>
+                    {message && (
+                      <Message variant='danger'>{message}</Message>
                     )}
                     {userInfo ? (
                       <Form onSubmit={submitHandler}>
                         <FormGroup controlId='rating'>
-                          <FormLabel>Rating</FormLabel>
+                        <p style={{fontSize:'30px', marginTop:'10px'}}>Rating</p>
                           <FormControl
                             as='select'
                             value={rating}

@@ -1,8 +1,7 @@
 import React,{useEffect,useState} from 'react'
 import axios from 'axios'
-import "../App.css"
+import "../row.css"
 import { Link} from 'react-router-dom'
-import {Image} from 'react-bootstrap'
 
 
 function Row({ title,category }) {
@@ -26,7 +25,7 @@ function Row({ title,category }) {
                 <div className="row_posters">
                     {products.map((product)=>(
                         <Link to={`/product/${product._id}`}>
-                           <Image key={product._id} className='row_poster' src={product.image} alt="img" />
+                          <img  key={product._id} className={`row_poster`} src={product.image} alt={product.name} />
                         </Link>
                          
                     ))}

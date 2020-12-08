@@ -52,7 +52,7 @@ const getProducts = asyncHandler(async (req, res) => {
 
 
   const getProductByCategoryTop = asyncHandler(async (req, res) => {
-    const product = await Product.find({'category': req.params.category}).limit(7)
+    const product = await Product.find({'category': req.params.category}).limit(15)
   
     if (product) {
       res.json(product)
